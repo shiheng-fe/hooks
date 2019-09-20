@@ -3,26 +3,26 @@ import { useState } from 'react';
 export type IUseModalResult<T = undefined> = {
   visible: boolean;
   initValue?: T;
-  openModal: (v?: T) => void;
+  openModal: (initValue?: T) => void;
   closeModal: () => void;
 };
 
 export default function useModal<T = undefined>(): IUseModalResult<T> {
   const [visible, setVisible] = useState(false);
-  const [value, setValue] = useState<T | undefined>();
+  const [initValue, setInitValue] = useState<T | undefined>();
 
-  const openModal = (v?: T) => {
+  const openModal = (initValue?: T) => {
     setVisible(true);
-    setValue(v);
+    setInitValue(initValue);
   };
 
   const closeModal = () => {
     setVisible(false);
-    setValue(undefined);
+    setInitValue(undefined);
   };
 
   return {
-    initValue: value,
+    initValue,
     openModal,
     visible,
     closeModal,
