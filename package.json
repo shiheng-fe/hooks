@@ -10,13 +10,28 @@
   },
   "scripts": {
     "dev": "father doc dev",
-    "build": "father build"
+    "build": "father build",
+    "cov": "father test --coverage"
   },
   "peerDependencies": {
     "react": "16.x"
   },
   "devDependencies": {
-    "father": "^2.16.0"
+    "@diamondyuan/eslint-config-react-typescript": "^7.0.0",
+    "@testing-library/react-hooks": "^2.0.1",
+    "@types/jest": "^24.0.18",
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.3.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.4.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.0.1",
+    "father": "^2.16.0",
+    "prettier": "^1.18.2",
+    "react": "^16.9.0",
+    "typescript": "^3.6.3"
   },
   "license": "MIT"
 }

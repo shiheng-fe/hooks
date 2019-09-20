@@ -3,3 +3,4 @@
 /dist
 /.docz
 /node_modules
+/coverage
