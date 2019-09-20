@@ -9,8 +9,9 @@
     "email": "admin@diamondyuan.com"
   },
   "scripts": {
-    "dev": "father doc dev",
-    "build": "father build",
+    "start": "cross-env NODE_ENV=development father doc dev --storybook",
+    "build": "father doc build --storybook",
+    "compile": "father build",
     "cov": "father test --coverage"
   },
   "peerDependencies": {
@@ -22,7 +23,10 @@
     "@types/jest": "^24.0.18",
     "@typescript-eslint/eslint-plugin": "^2.3.0",
     "@typescript-eslint/parser": "^2.3.0",
+    "antd": "^3.23.3",
     "babel-eslint": "^10.0.3",
+    "babel-plugin-import": "^1.12.1",
+    "cross-env": "^6.0.0",
     "eslint": "^6.4.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-prettier": "^3.1.1",
