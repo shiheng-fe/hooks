@@ -18,7 +18,6 @@ export default function useModal<T = undefined>(): IUseModalResult<T> {
 
   const closeModal = () => {
     setVisible(false);
-    setInitValue(undefined);
   };
 
   return {

@@ -32,12 +32,12 @@ describe('useModal', () => {
       expect(hook.result.current.initValue!.name).toEqual('DiamondYuan');
     });
 
-    it('should closeModal clean initValue', () => {
+    it('should closeModal not clean initValue', () => {
       act(() => {
         hook.result.current.closeModal();
       });
       expect(hook.result.current.visible).toEqual(false);
-      expect(hook.result.current.initValue!).toEqual(undefined);
+      expect(hook.result.current.initValue!.name).toEqual('DiamondYuan');
     });
   });
 });
