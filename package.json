@@ -2,12 +2,16 @@
   "name": "@shihengtech/hooks",
   "version": "0.0.1",
   "description": "Useful hooks.",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "main": "lib/index.js",
+  "module": "./es/index",
   "authors": {
     "name": "DiamondYuan",
     "email": "admin@diamondyuan.com"
   },
+  "files": [
+    "es",
+    "lib"
+  ],
   "scripts": {
     "start": "cross-env NODE_ENV=development father doc dev --storybook",
     "build": "father doc build --storybook",
