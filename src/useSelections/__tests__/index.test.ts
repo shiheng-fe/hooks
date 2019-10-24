@@ -35,8 +35,8 @@ describe('useSelections', () => {
   const hookUtils = (hook: ReturnType<typeof setUp>) => {
     const { current } = hook.result;
     return {
-      seleected: current[0][0],
-      helper: current[0][1],
+      selected: current[0].selected,
+      helper: current[0],
       setItems: current[1],
     };
   };
@@ -47,13 +47,13 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.select(1);
       });
-      expect(hookUtils(hook).seleected).toEqual([1]);
+      expect(hookUtils(hook).selected).toEqual([1]);
       expect(hookUtils(hook).helper.isSelected(1)).toEqual(true);
       expect(hookUtils(hook).helper.allSelected).toEqual(false);
       act(() => {
         hookUtils(hook).helper.unSelect(1);
       });
-      expect(hookUtils(hook).seleected).toEqual([]);
+      expect(hookUtils(hook).selected).toEqual([]);
       expect(hookUtils(hook).helper.isSelected(1)).toEqual(false);
       expect(hookUtils(hook).helper.allSelected).toEqual(false);
     });
@@ -62,13 +62,13 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.toggle(1);
       });
-      expect(hookUtils(hook).seleected).toEqual([1]);
+      expect(hookUtils(hook).selected).toEqual([1]);
       expect(hookUtils(hook).helper.isSelected(1)).toEqual(true);
       expect(hookUtils(hook).helper.allSelected).toEqual(false);
       act(() => {
         hookUtils(hook).helper.toggle(1);
       });
-      expect(hookUtils(hook).seleected).toEqual([]);
+      expect(hookUtils(hook).selected).toEqual([]);
       expect(hookUtils(hook).helper.isSelected(1)).toEqual(false);
       expect(hookUtils(hook).helper.allSelected).toEqual(false);
     });
@@ -78,7 +78,7 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.selectAll();
       });
-      expect(hookUtils(hook).seleected).toEqual([1, 2, 3]);
+      expect(hookUtils(hook).selected).toEqual([1, 2, 3]);
       expect(hookUtils(hook).helper.allSelected).toEqual(true);
       expect(hookUtils(hook).helper.noneSelected).toEqual(false);
       expect(hookUtils(hook).helper.partiallySelected).toEqual(false);
@@ -86,7 +86,7 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.unSelectAll();
       });
-      expect(hookUtils(hook).seleected).toEqual([]);
+      expect(hookUtils(hook).selected).toEqual([]);
       expect(hookUtils(hook).helper.allSelected).toEqual(false);
       expect(hookUtils(hook).helper.noneSelected).toEqual(true);
       expect(hookUtils(hook).helper.partiallySelected).toEqual(false);
@@ -97,7 +97,7 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.toggleAll();
       });
-      expect(hookUtils(hook).seleected).toEqual([1, 2, 3]);
+      expect(hookUtils(hook).selected).toEqual([1, 2, 3]);
       expect(hookUtils(hook).helper.allSelected).toEqual(true);
       expect(hookUtils(hook).helper.noneSelected).toEqual(false);
       expect(hookUtils(hook).helper.partiallySelected).toEqual(false);
@@ -105,7 +105,7 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.toggleAll();
       });
-      expect(hookUtils(hook).seleected).toEqual([]);
+      expect(hookUtils(hook).selected).toEqual([]);
       expect(hookUtils(hook).helper.allSelected).toEqual(false);
       expect(hookUtils(hook).helper.noneSelected).toEqual(true);
       expect(hookUtils(hook).helper.partiallySelected).toEqual(false);
@@ -116,7 +116,7 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.setSelected([1]);
       });
-      expect(hookUtils(hook).seleected).toEqual([1]);
+      expect(hookUtils(hook).selected).toEqual([1]);
       expect(hookUtils(hook).helper.isSelected(1)).toEqual(true);
       expect(hookUtils(hook).helper.noneSelected).toEqual(false);
       expect(hookUtils(hook).helper.allSelected).toEqual(false);
@@ -125,7 +125,7 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.setSelected([]);
       });
-      expect(hookUtils(hook).seleected).toEqual([]);
+      expect(hookUtils(hook).selected).toEqual([]);
       expect(hookUtils(hook).helper.isSelected(1)).toEqual(false);
       expect(hookUtils(hook).helper.noneSelected).toEqual(true);
       expect(hookUtils(hook).helper.allSelected).toEqual(false);
@@ -134,7 +134,7 @@ describe('useSelections', () => {
       act(() => {
         hookUtils(hook).helper.setSelected([1, 2, 3]);
       });
-      expect(hookUtils(hook).seleected).toEqual([1, 2, 3]);
+      expect(hookUtils(hook).selected).toEqual([1, 2, 3]);
       expect(hookUtils(hook).helper.isSelected(1)).toEqual(true);
       expect(hookUtils(hook).helper.noneSelected).toEqual(false);
       expect(hookUtils(hook).helper.allSelected).toEqual(true);

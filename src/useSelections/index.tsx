@@ -63,21 +63,18 @@ export default function useSelections<T>(items: T[]) {
     return { selectAll, unSelectAll, noneSelected, allSelected, partiallySelected, toggleAll };
   }, [selectedSet, items]);
 
-  return [
+  return {
     selected,
-    {
-      selected,
-      isSelected,
-      select,
-      unSelect,
-      toggle,
-      selectAll,
-      unSelectAll,
-      toggleAll,
-      allSelected,
-      noneSelected,
-      partiallySelected,
-      setSelected,
-    },
-  ] as const;
+    isSelected,
+    select,
+    unSelect,
+    toggle,
+    selectAll,
+    unSelectAll,
+    toggleAll,
+    allSelected,
+    noneSelected,
+    partiallySelected,
+    setSelected,
+  };
 }
