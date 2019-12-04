@@ -2,8 +2,10 @@ import { useState } from 'react';
 /* eslint-disable max-nested-callbacks */
 import { renderHook, act } from '@testing-library/react-hooks';
 import useLoading from '../index';
+import { delay } from '../../utils';
 
 const MagicErrorNumber = 42;
+jest.useFakeTimers();
 
 describe('useLoading', () => {
   it('should be defined', () => {
@@ -35,6 +37,7 @@ describe('useLoading', () => {
 
       const useLoadingResponse = useLoading(
         async (arg: number) => {
+          await delay(arg);
           if (arg === MagicErrorNumber) {
             throw new Error(`${MagicErrorNumber}`);
           }
@@ -65,6 +68,7 @@ describe('useLoading', () => {
       hook.result.current.useLoadingResponse.run(10);
     });
     expect(hook.result.current.count).toEqual(1);
+    jest.runAllTimers();
     await hook.waitForNextUpdate();
     expect(successCallback).lastCalledWith(1, 11, [10]);
   });
@@ -81,6 +85,7 @@ describe('useLoading', () => {
       hook.result.current.useLoadingResponse.run(MagicErrorNumber);
     });
     expect(hook.result.current.count).toEqual(1);
+    jest.runAllTimers();
     await hook.waitForNextUpdate();
     expect(errorCallBack).lastCalledWith(1, new Error(`${MagicErrorNumber}`), [MagicErrorNumber]);
   });
@@ -96,5 +101,66 @@ describe('useLoading', () => {
     });
     expect(run === hook.result.current.useLoadingResponse.run).toBeTruthy();
     expect(cancel === hook.result.current.useLoadingResponse.cancel).toBeTruthy();
+  });
+
+  it('loading and params should be correct', async () => {
+    const successCallback = jest.fn();
+
+    let hook = setUp({ successCallback });
+
+    expect(hook.result.current.useLoadingResponse.loading).toBeFalsy();
+    expect(hook.result.current.useLoadingResponse.params).toBeUndefined();
+
+    act(() => {
+      hook.result.current.useLoadingResponse.run(2000);
+    });
+
+    expect(hook.result.current.useLoadingResponse.loading).toBeTruthy();
+    expect(hook.result.current.useLoadingResponse.params).toEqual([2000]);
+
+    jest.advanceTimersByTime(1000);
+
+    act(() => {
+      hook.result.current.useLoadingResponse.run(3000);
+    });
+
+    expect(hook.result.current.useLoadingResponse.loading).toBeTruthy();
+    expect(hook.result.current.useLoadingResponse.params).toEqual([3000]);
+    expect(successCallback).toBeCalledTimes(0);
+
+    jest.advanceTimersByTime(5000);
+    await hook.waitForNextUpdate();
+
+    expect(successCallback).toBeCalledTimes(1);
+    expect(successCallback).lastCalledWith(0, 3000, [3000]);
+    expect(hook.result.current.useLoadingResponse.loading).toBeFalsy();
+    expect(hook.result.current.useLoadingResponse.params).toEqual([3000]);
+  });
+
+  it('cancel should work correct', async () => {
+    const successCallback = jest.fn();
+
+    let hook = setUp({ successCallback });
+
+    expect(hook.result.current.useLoadingResponse.loading).toBeFalsy();
+    expect(hook.result.current.useLoadingResponse.params).toBeUndefined();
+
+    act(() => {
+      hook.result.current.useLoadingResponse.run(2000);
+    });
+
+    expect(hook.result.current.useLoadingResponse.loading).toBeTruthy();
+    expect(hook.result.current.useLoadingResponse.params).toEqual([2000]);
+
+    jest.advanceTimersByTime(1000);
+
+    act(() => {
+      hook.result.current.useLoadingResponse.cancel();
+    });
+
+    expect(hook.result.current.useLoadingResponse.loading).toBeFalsy();
+    expect(hook.result.current.useLoadingResponse.params).toEqual([2000]);
+
+    expect(successCallback).toBeCalledTimes(0);
   });
 });
