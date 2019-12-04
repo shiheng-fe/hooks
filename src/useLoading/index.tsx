@@ -1,6 +1,6 @@
 import { useCallback, useState, useRef } from 'react';
-import { Unpack, ArgsType } from '@/utils';
-import useEventCallback from '@/useEventCallback';
+import { Unpack, ArgsType } from '../utils';
+import useEventCallback from '../useEventCallback';
 
 export interface IUseLoadingOption<T> {
   onSuccess?: (result: T, params: ArgsType<T>) => void;
