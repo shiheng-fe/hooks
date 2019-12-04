@@ -20,6 +20,7 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
     execCount.current += 1;
     const runCount = execCount.current;
     params.current = args;
+    setState(s => ({ ...s, loading: true }));
     return func(...args)
       .then(result => {
         if (runCount === execCount.current) {
