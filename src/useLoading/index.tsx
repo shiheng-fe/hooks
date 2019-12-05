@@ -2,14 +2,14 @@ import { useCallback, useState, useRef } from 'react';
 import { Unpack, ArgsType } from '../utils';
 import useEventCallback from '../useEventCallback';
 
-export interface IUseLoadingOption<T> {
-  onSuccess?: (result: T, params: ArgsType<T>) => void;
+export interface IUseLoadingOption<T extends (...args: any[]) => Promise<any>> {
+  onSuccess?: (result: Unpack<ReturnType<T>>, params: ArgsType<T>) => void;
   onError?: (error: Error, params: ArgsType<T>) => void;
 }
 
 export default function useLoading<T extends (...args: any[]) => Promise<any>>(
   func: T,
-  options: IUseLoadingOption<Unpack<ReturnType<T>>> = {},
+  options: IUseLoadingOption<T> = {},
 ) {
   const [{ loading }, setState] = useState({ loading: false });
   const execCount = useRef(0);
