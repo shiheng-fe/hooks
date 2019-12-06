@@ -91,4 +91,78 @@ describe('useFetch', () => {
       expect(hook.result.current.useFetchResponse.error).toBeUndefined();
     });
   });
+
+  describe('test get correct data', () => {
+    it('should get correct data', async () => {
+      let hook = setUp({});
+      expect(hook.result.current.useFetchResponse.loading).toBeTruthy();
+      expect(hook.result.current.useFetchResponse.params).toEqual([]);
+      expect(hook.result.current.useFetchResponse.data).toBeUndefined();
+      expect(hook.result.current.useFetchResponse.error).toBeUndefined();
+
+      act(() => {
+        hook.result.current.setAddTimeout(1000);
+      });
+
+      jest.advanceTimersByTime(1500);
+
+      expect(hook.result.current.useFetchResponse.loading).toBeTruthy();
+      expect(hook.result.current.useFetchResponse.params).toEqual([]);
+      expect(hook.result.current.useFetchResponse.data).toBeUndefined();
+      expect(hook.result.current.useFetchResponse.error).toBeUndefined();
+
+      jest.advanceTimersByTime(1000);
+      await hook.waitForNextUpdate();
+
+      expect(hook.result.current.useFetchResponse.loading).toBeFalsy();
+      expect(hook.result.current.useFetchResponse.params).toEqual([]);
+      expect(hook.result.current.useFetchResponse.data).toBe(2000);
+      expect(hook.result.current.useFetchResponse.error).toBeUndefined();
+    });
+
+    it('should get result of onSuccess', async () => {
+      const error = new Error(`${Math.random()}`);
+      const randomData = Math.random();
+
+      let hook = setUp({
+        onSuccess() {
+          return {
+            data: randomData,
+            error: error,
+          };
+        },
+      });
+      expect(hook.result.current.useFetchResponse.loading).toBeTruthy();
+      expect(hook.result.current.useFetchResponse.params).toEqual([]);
+      expect(hook.result.current.useFetchResponse.data).toBeUndefined();
+      expect(hook.result.current.useFetchResponse.error).toBeUndefined();
+
+      jest.advanceTimersByTime(1000);
+
+      await hook.waitForNextUpdate();
+
+      expect(hook.result.current.useFetchResponse.loading).toBeFalsy();
+      expect(hook.result.current.useFetchResponse.params).toEqual([]);
+      expect(hook.result.current.useFetchResponse.data).toBe(randomData);
+      expect(hook.result.current.useFetchResponse.error).toEqual(error);
+    });
+  });
+
+  it('test initialState', async () => {
+    let hook = setUp({
+      initialState: { data: 1000 },
+    });
+    expect(hook.result.current.useFetchResponse.loading).toBeTruthy();
+    expect(hook.result.current.useFetchResponse.params).toEqual([]);
+    expect(hook.result.current.useFetchResponse.data).toBe(1000);
+    expect(hook.result.current.useFetchResponse.error).toBeUndefined();
+
+    jest.advanceTimersByTime(1000);
+    await hook.waitForNextUpdate();
+
+    expect(hook.result.current.useFetchResponse.loading).toBeFalsy();
+    expect(hook.result.current.useFetchResponse.params).toEqual([]);
+    expect(hook.result.current.useFetchResponse.data).toBe(1000);
+    expect(hook.result.current.useFetchResponse.error).toBeUndefined();
+  });
 });
