@@ -55,7 +55,8 @@ const _CreateEditModal: React.FC<CreateEditModalProps> = ({
       <Form>
         <Form.Item label="name">
           {form.getFieldDecorator('name', {
-            initialValue: !!initValue ? initValue.name : undefined,
+            // eslint-disable-next-line no-undefined
+            initialValue: initValue ? initValue.name : undefined,
           })(<Input placeholder="Please input name"></Input>)}
         </Form.Item>
       </Form>

@@ -16,11 +16,11 @@
     "access": "public"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development father doc dev --storybook",
+    "start": "father-doc dev",
     "build": "father doc build --storybook",
     "compile": "father build",
     "cov": "father test --coverage",
-    "prepublish":"npm run compile"
+    "prepublish": "npm run compile"
   },
   "peerDependencies": {
     "react": "16.x"
@@ -41,6 +41,7 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.0.1",
     "father": "^2.16.0",
+    "father-doc": "^1.0.0-alpha.2",
     "prettier": "^1.18.2",
     "react": "^16.9.0",
     "typescript": "^3.6.3"
