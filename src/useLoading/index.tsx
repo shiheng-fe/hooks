@@ -1,13 +1,13 @@
 import { useCallback, useState, useRef } from 'react';
-import { Unpack, ArgsType } from '../utils';
+import { Unpack, ArgsType, PromiseFunction } from '../utils';
 import useEventCallback from '../useEventCallback';
 
-export interface IUseLoadingOption<T extends (...args: any[]) => Promise<any>> {
+export interface IUseLoadingOption<T extends PromiseFunction> {
   onSuccess?: (result: Unpack<ReturnType<T>>, params: ArgsType<T>) => void;
   onError?: (error: Error, params: ArgsType<T>) => void;
 }
 
-export default function useLoading<T extends (...args: any[]) => Promise<any>>(
+export default function useLoading<T extends PromiseFunction>(
   func: T,
   options: IUseLoadingOption<T> = {},
 ) {
@@ -16,7 +16,7 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
 
   const params = useRef<ArgsType<T>>();
 
-  const run = useEventCallback((...args: ArgsType<T>): Promise<Unpack<ReturnType<T>>> => {
+  const run = useEventCallback((...args: ArgsType<T>) => {
     execCount.current += 1;
     const runCount = execCount.current;
     params.current = args;
