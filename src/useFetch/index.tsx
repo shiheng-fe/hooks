@@ -52,6 +52,7 @@ export default function useFetch<T extends PromiseFunction>(
 
   return {
     ...state,
+    setState,
     loading,
     run,
     cancel,
