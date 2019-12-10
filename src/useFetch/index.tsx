@@ -1,5 +1,5 @@
 import { useState, useEffect, DependencyList } from 'react';
-import { Unpack, PromiseFunction, ArgsType, PromiseReturnType } from '../utils';
+import { Unpack, ArgsType, PromiseReturnType } from '../utils';
 import useLoading from '../useLoading';
 
 export interface IUseFetchState<D> {
@@ -7,7 +7,7 @@ export interface IUseFetchState<D> {
   error?: Error;
 }
 
-export interface IUseFetchOptions<T extends PromiseFunction> {
+export interface IUseFetchOptions<T extends (...args: any[]) => any> {
   initialState?: IUseFetchState<PromiseReturnType<T>>;
   onSuccess?: (
     result: PromiseReturnType<T>,
@@ -17,7 +17,7 @@ export interface IUseFetchOptions<T extends PromiseFunction> {
   auto?: boolean;
 }
 
-export default function useFetch<T extends PromiseFunction>(
+export default function useFetch<T extends (...args: any[]) => any>(
   func: T,
   deps: DependencyList = [],
   { auto = true, onError, onSuccess, initialState }: IUseFetchOptions<T> = {},
