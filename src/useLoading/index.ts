@@ -13,13 +13,13 @@ type IUseLoadingOption<T extends (...args: any[]) => Promise<any>> = {
 
 export default function useLoading<
   T extends (...args: any[]) => Promise<any>,
-  S extends IUseLoadingState<T> = IUseLoadingState<T>
+  S extends IUseLoadingState<T>
 >(
   fn: T,
   options:
     | IUseLoadingOption<T>
     | ((setState: React.Dispatch<React.SetStateAction<S>>) => IUseLoadingOption<T>) = {},
-  initialState?: S,
+  initialState?: Partial<S>,
 ) {
   const [state, setState] = useState<S>({ loading: false, ...initialState } as any);
 

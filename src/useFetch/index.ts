@@ -7,22 +7,25 @@ type IUseFetchState<D> = {
   error?: any;
 };
 
-export interface IUseFetchOptions<T extends (...args: any[]) => any, D = PromiseReturnType<T>> {
-  initialState?: IUseFetchState<D>;
-  onSuccess?: (result: D, params: Parameters<T>) => void | IUseFetchState<D>;
-  onError?: (error: Error, params: Parameters<T>) => void | IUseFetchState<D>;
+export interface IUseFetchOptions<T extends (...args: any[]) => any> {
+  initialState?: IUseFetchState<PromiseReturnType<T>>;
+  onSuccess?: (
+    result: PromiseReturnType<T>,
+    params: Parameters<T>,
+  ) => void | IUseFetchState<PromiseReturnType<T>>;
+  onError?: (error: Error, params: Parameters<T>) => void | IUseFetchState<PromiseReturnType<T>>;
   auto?: boolean;
 }
 
-export default function useFetch<
-  T extends (...args: any[]) => any,
-  D extends PromiseReturnType<T> = PromiseReturnType<T>
->(
+export default function useFetch<T extends (...args: any[]) => any>(
   func: T,
   deps: DependencyList = [],
-  { auto = true, onError, onSuccess, initialState }: IUseFetchOptions<T, D> = {},
+  { auto = true, onError, onSuccess, initialState }: IUseFetchOptions<T> = {},
 ) {
-  const result = useLoading<typeof func, IUseLoadingState<T> & IUseFetchState<D>>(
+  const result = useLoading<
+    typeof func,
+    IUseLoadingState<T> & IUseFetchState<PromiseReturnType<T>>
+  >(
     func,
     setState => ({
       onSuccess: (data, params) => {
@@ -39,8 +42,8 @@ export default function useFetch<
         }
         setState(s => ({ ...s, error }));
       },
-      initialState,
     }),
+    initialState,
   );
 
   useEffect(() => {
