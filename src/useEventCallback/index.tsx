@@ -10,13 +10,10 @@ function useEventCallback(fn: (...args: any[]) => any, dependencies: DependencyL
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fn, ...dependencies]);
 
-  return useCallback(
-    (...args: any[]) => {
-      const fn = ref.current;
-      return fn(...args);
-    },
-    [ref],
-  );
+  return useCallback((...args: any[]) => {
+    const fn = ref.current;
+    return fn(...args);
+  }, []);
 }
 
 export default useEventCallback;
