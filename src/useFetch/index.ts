@@ -1,6 +1,6 @@
 import { useEffect, DependencyList } from 'react';
 import useLoading, { IUseLoadingState } from '../useLoading';
-import { PromiseReturnType } from '@/typeUtils';
+import { PromiseReturnType } from '../utils';
 
 type IUseFetchState<D> = {
   data?: D;

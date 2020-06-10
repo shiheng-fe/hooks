@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
-import { PromiseReturnType } from '@/typeUtils';
+import { PromiseReturnType } from '../utils';
 
 export type IUseLoadingState<T extends (...args: any[]) => Promise<any>> = {
   loading: boolean;

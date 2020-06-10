@@ -1,6 +1,6 @@
 {
   "name": "@shihengtech/hooks",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Useful hooks.",
   "main": "lib/index.js",
   "module": "./es/index",
