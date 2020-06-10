@@ -1,13 +1,15 @@
 {
   "name": "@shihengtech/hooks",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "description": "Useful hooks.",
   "main": "lib/index.js",
   "module": "./es/index",
-  "authors": {
-    "name": "DiamondYuan",
-    "email": "admin@diamondyuan.com"
-  },
+  "keywords": [
+    "hooks",
+    "hook",
+    "react-hooks",
+    "shiheng"
+  ],
   "files": [
     "es",
     "lib"

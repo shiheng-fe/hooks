@@ -5,6 +5,7 @@ import useLoading from './useLoading';
 import useEventCallback from './useEventCallback';
 import useFetch from './useFetch';
 import useImmutable from './useImmutable';
+import useUpdateEffect from './useUpdateEffect';
 
 export {
   useModal,
@@ -14,4 +15,5 @@ export {
   useEventCallback,
   useFetch,
   useImmutable,
+  useUpdateEffect,
 };
