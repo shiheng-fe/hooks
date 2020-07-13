@@ -1,4 +1,4 @@
-import { useEffect, DependencyList } from 'react';
+import { useEffect, DependencyList, useCallback } from 'react';
 import useLoading, { IUseLoadingState } from '../useLoading';
 import { PromiseReturnType } from '../utils';
 
@@ -46,12 +46,23 @@ export default function useFetch<T extends (...args: any[]) => any>(
     initialState,
   );
 
+  const setState = useCallback(
+    (nextState =>
+      result.setState(s => ({
+        ...s,
+        ...(typeof nextState === 'function' ? nextState(s) : nextState),
+      }))) as React.Dispatch<React.SetStateAction<IUseFetchState<PromiseReturnType<T>>>>,
+    [],
+  );
+
   useEffect(() => {
     if (auto) {
       (result.run as () => void)();
+
+      return result.cancel;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
-  return result;
+  return { ...result, setState };
 }
