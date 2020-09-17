@@ -47,13 +47,13 @@ export default function useLoading<
         fn(...args)
           .then(result => {
             if (abort) return;
-            setState(s => ({ ...s, loading: false }));
             onSuccess && onSuccess(result, args);
+            setState(s => ({ ...s, loading: false }));
           })
           .catch(error => {
             if (abort) return;
-            setState(s => ({ ...s, loading: false }));
             onError && onError(error, args);
+            setState(s => ({ ...s, loading: false }));
           });
 
         fnsRef.current.cancel = () => (abort = true);

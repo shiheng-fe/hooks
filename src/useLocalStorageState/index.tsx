@@ -1,21 +1,43 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
-function useLocalStorageState<T = undefined>(key: string): [T | undefined, (value?: T) => void];
-function useLocalStorageState<T>(key: string, value: T): [T, (value?: T) => void];
+const delayRun = (fn: Function) => setTimeout(fn, 0);
+
+function useLocalStorageState<T = undefined>(
+  key: string,
+): [T | undefined, React.Dispatch<React.SetStateAction<T>>];
+function useLocalStorageState<T>(
+  key: string,
+  value: T,
+): [T, React.Dispatch<React.SetStateAction<T>>];
 
 function useLocalStorageState<T>(key: string, defaultValue?: T) {
-  const [state, setState] = useState<T | undefined>(() =>
-    localStorage.getItem(key) === null ? defaultValue : JSON.parse(localStorage.getItem(key)!),
-  );
-  function updateState(value?: T) {
-    if (typeof value === 'undefined') {
-      localStorage.removeItem(key);
-      setState(defaultValue);
-    } else {
-      localStorage.setItem(key, JSON.stringify(value));
+  const [state, setState] = useState<T>(() => {
+    const localValue = localStorage.getItem(key);
+    return localValue === null ? defaultValue : JSON.parse(localValue);
+  });
+
+  const updateState: typeof setState = useCallback(
+    value => {
+      const valueType = typeof value;
+      if (valueType === 'function') {
+        setState(v => {
+          const nextValue = (value as (value: T) => T)(v);
+
+          delayRun(() => localStorage.setItem(key, JSON.stringify(nextValue)));
+          return nextValue;
+        });
+      } else if (valueType === 'undefined') {
+        setState(value);
+        delayRun(() => localStorage.removeItem(key));
+      }
+
       setState(value);
-    }
-  }
+      delayRun(() => localStorage.setItem(key, JSON.stringify(value)));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   return [state, updateState];
 }
 
