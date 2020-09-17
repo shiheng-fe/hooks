@@ -12,8 +12,11 @@ function useLocalStorageState<T>(
 
 function useLocalStorageState<T>(key: string, defaultValue?: T) {
   const [state, setState] = useState<T>(() => {
-    const localValue = localStorage.getItem(key);
-    return localValue === null ? defaultValue : JSON.parse(localValue);
+    try {
+      return JSON.parse(localStorage.getItem(key)!);
+    } catch (_e) {
+      return defaultValue;
+    }
   });
 
   const updateState: typeof setState = useCallback(
