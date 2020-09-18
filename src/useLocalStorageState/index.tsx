@@ -13,7 +13,9 @@ function useLocalStorageState<T>(
 function useLocalStorageState<T>(key: string, defaultValue?: T) {
   const [state, setState] = useState<T>(() => {
     try {
-      return JSON.parse(localStorage.getItem(key)!);
+      const localValue = JSON.parse(localStorage.getItem(key)!);
+      // eslint-disable-next-line no-void
+      return [null, void 0].includes(localValue) ? defaultValue : localValue;
     } catch (_e) {
       return defaultValue;
     }
