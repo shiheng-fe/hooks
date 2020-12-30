@@ -31,9 +31,13 @@ function useLocalStorageState<T>(key: string, defaultValue?: T) {
           delayRun(() => localStorage.setItem(key, JSON.stringify(nextValue)));
           return nextValue;
         });
-      } else if (valueType === 'undefined') {
+        return;
+      }
+
+      if (valueType === 'undefined') {
         setState(value);
         delayRun(() => localStorage.removeItem(key));
+        return;
       }
 
       setState(value);
