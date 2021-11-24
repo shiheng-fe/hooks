@@ -1,6 +1,6 @@
-import { useEffect, DependencyList, useCallback } from 'react';
-import useLoading, { IUseLoadingState } from '../useLoading';
-import { PromiseReturnType } from '../utils';
+import { useEffect, DependencyList, useState } from 'react';
+import useLoading, { FinishedParams, IUseLoadingState } from '../useLoading';
+import { isFunction, PromiseReturnType } from '@/_internal/utils';
 
 type IUseFetchState<D> = {
   data?: D;
@@ -8,54 +8,63 @@ type IUseFetchState<D> = {
 };
 
 export interface IUseFetchOptions<T extends (...args: any[]) => any> {
-  initialState?: IUseFetchState<PromiseReturnType<T>>;
+  auto?: boolean;
+  initialState?:
+    | IUseFetchState<PromiseReturnType<T>>
+    | (() => IUseFetchState<PromiseReturnType<T>>);
   onSuccess?: (
     result: PromiseReturnType<T>,
-    params: Parameters<T>,
+    ...params: Parameters<T>
   ) => void | IUseFetchState<PromiseReturnType<T>>;
-  onError?: (error: Error, params: Parameters<T>) => void | IUseFetchState<PromiseReturnType<T>>;
-  auto?: boolean;
+  onError?: (
+    error: Error,
+    ...params: Parameters<T>
+  ) => void | IUseFetchState<PromiseReturnType<T>>;
+  onFinished?: (...args: FinishedParams<T>) => void;
+  useCustomEffect?: typeof useEffect;
 }
 
 export default function useFetch<T extends (...args: any[]) => any>(
   func: T,
   deps: DependencyList = [],
-  { auto = true, onError, onSuccess, initialState }: IUseFetchOptions<T> = {},
+  {
+    auto = true,
+    onError,
+    onSuccess,
+    onFinished,
+    initialState,
+    useCustomEffect = useEffect,
+  }: IUseFetchOptions<T> = {},
 ) {
+  const [state, setState] = useState(initialState);
+
   const result = useLoading<
     typeof func,
     IUseLoadingState<T> & IUseFetchState<PromiseReturnType<T>>
-  >(
-    func,
-    setState => ({
-      onSuccess: (data, params) => {
-        if (onSuccess) {
-          setState(s => ({ ...s, data, ...onSuccess(data, params) }));
-          return;
-        }
-        setState(s => ({ ...s, data }));
-      },
-      onError: (error, params) => {
-        if (onError) {
-          setState(s => ({ ...s, error, ...onError(error, params) }));
-          return;
-        }
-        setState(s => ({ ...s, error }));
-      },
-    }),
-    initialState,
-  );
+  >(func, {
+    onSuccess: (data, ...params) => {
+      if (onSuccess) {
+        const sucResult = onSuccess(data, ...params);
+        setState((s) => ({ ...s, data, ...sucResult }));
+        return;
+      }
+      setState((s) => ({ ...s, data }));
+    },
+    onError: (error, ...params) => {
+      if (onError) {
+        const errResult = onError(error, ...params);
+        setState((s) => ({ ...s, error, ...errResult }));
+        return;
+      }
+      const _initialState = isFunction(initialState)
+        ? initialState()
+        : initialState;
+      setState((s) => ({ ...s, ..._initialState, error }));
+    },
+    onFinished,
+  });
 
-  const setState = useCallback(
-    (nextState =>
-      result.setState(s => ({
-        ...s,
-        ...(typeof nextState === 'function' ? nextState(s) : nextState),
-      }))) as React.Dispatch<React.SetStateAction<IUseFetchState<PromiseReturnType<T>>>>,
-    [],
-  );
-
-  useEffect(() => {
+  useCustomEffect(() => {
     if (auto) {
       (result.run as () => void)();
 
@@ -64,5 +73,5 @@ export default function useFetch<T extends (...args: any[]) => any>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
-  return { ...result, setState };
+  return { ...result, ...state, setState };
 }

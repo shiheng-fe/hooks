@@ -7,12 +7,24 @@
     "jsx": "react",
     "esModuleInterop": true,
     "sourceMap": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "strict": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@@/*": ["src/.umi/*"]
     },
-    "declaration": true,
-    "allowSyntheticDefaultImports": true
-  }
+    "typeRoots": ["./typings"],
+    "allowSyntheticDefaultImports": true,
+    "types": ["@types/jest"]
+  },
+  "exclude": [
+    "node_modules",
+    "lib",
+    "es",
+    "dist",
+    "**/__test__",
+    "test",
+    "docs",
+    "tests"
+  ]
 }
