@@ -1,3 +1,13 @@
+---
+nav:
+  title: Hooks
+  path: /hooks
+
+group:
+  title: common
+  path: /common
+---
+
 # useSelections
 
 This hook is used for checkbox group, supports multiple selection, single selection, select-all, select-none and semi-selected.
@@ -6,14 +16,14 @@ This hook is used for checkbox group, supports multiple selection, single select
 
 ## API
 
-```javascript
-const result: Result= useSelections<T>(items: T[]);
+```tsx | pure
+const result: Result = useSelections<T>(items: T[]);
 ```
 
 ### Result
 
 | Property          | Description                 | Type                  |
-|-------------------|-----------------------------|-----------------------|
+| ----------------- | --------------------------- | --------------------- |
 | selected          | selected Items              | array                 |
 | isSelected        | Whether item is selected    | (value: T) => boolean |
 | select            | Select item                 | (value: T) => void    |

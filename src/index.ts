@@ -1,27 +1,15 @@
-import useModal from './useModal';
-import useSelections from './useSelections';
-import useLocalStorageState from './useLocalStorageState';
-import useLoading from './useLoading';
-import useEventCallback from './useEventCallback';
-import useFetch from './useFetch';
-import useImmutable from './useImmutable';
-import useImmutableFunc from './useImmutableFunc';
-import useUpdateEffect from './useUpdateEffect';
-import usePrevious from './usePrevious';
-import useForceUpdate from './useForceUpdate';
-import useToggle from './useToggle';
-
+export { default as useModal } from './useModal';
+export { default as useSelections } from './useSelections';
+export { default as useLocalStorageState } from './useLocalStorageState';
+export { default as useLoading } from './useLoading';
+export { default as useFetch } from './useFetch';
+export { default as useImmutable } from './useImmutable';
 export {
-  useModal,
-  useSelections,
-  useLocalStorageState,
-  useLoading,
-  useEventCallback,
-  useFetch,
-  useImmutable,
-  useImmutableFunc,
-  useUpdateEffect,
-  usePrevious,
-  useForceUpdate,
-  useToggle,
-};
+  default as useImmutableFunc,
+  // 兼容旧版
+  default as useEventCallback,
+} from './useImmutableFn';
+export { default as useUpdateEffect } from './useUpdateEffect';
+export { default as usePrevious } from './usePrevious';
+export { default as useForceUpdate } from './useForceUpdate';
+export { default as useToggle } from './useToggle';
