@@ -35,7 +35,7 @@ jobs:
         if: ${{ steps.make-release.outputs.release_created }}
 
       - name: publish
-        run: npm release
+        run: npm run release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM }}
         if: ${{ steps.make-release.outputs.release_created }}
