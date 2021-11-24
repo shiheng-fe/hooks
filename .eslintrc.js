@@ -1,13 +1,9 @@
 module.exports = {
-  extends: [
-    '@diamondyuan/react-typescript',
-    'prettier',
-    'prettier/@typescript-eslint',
-    'prettier/react',
-  ],
-  plugins: ['prettier'],
+  extends: ['@diamondyuan/react-typescript', 'plugin:prettier/recommended'],
   rules: {
-    'prettier/prettier': 'error',
+    'no-redeclare': 'off',
     'no-return-assign': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
+    '@typescript-eslint/no-empty-function': 'off',
   },
 };
