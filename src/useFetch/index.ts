@@ -30,14 +30,16 @@ export default function useFetch<T extends (...args: any[]) => any>(
     setState => ({
       onSuccess: (data, params) => {
         if (onSuccess) {
-          setState(s => ({ ...s, data, ...onSuccess(data, params) }));
+          const extra = onSuccess(data, params);
+          setState(s => ({ ...s, data, ...extra }));
           return;
         }
         setState(s => ({ ...s, data }));
       },
       onError: (error, params) => {
         if (onError) {
-          setState(s => ({ ...s, error, ...onError(error, params) }));
+          const extra = onError(error, params);
+          setState(s => ({ ...s, error, ...extra }));
           return;
         }
         setState(s => ({ ...s, error }));
