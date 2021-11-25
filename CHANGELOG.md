@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.0.6](https://www.github.com/shiheng-fe/hooks/compare/v1.0.5...v1.0.6) (2021-11-25)
+
+
+### Bug Fixes
+
+* :bug: useFetch ([dec9c04](https://www.github.com/shiheng-fe/hooks/commit/dec9c0452a3961d7c88653893cbb5b9b663cb9b0))
+* :bug: useLoading ([3359069](https://www.github.com/shiheng-fe/hooks/commit/3359069c1b548704d584a5bc3bd278dc8effbcca))
+
 ### [1.0.5](https://www.github.com/shiheng-fe/hooks/compare/v1.0.4...v1.0.5) (2021-11-25)
 
 
