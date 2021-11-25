@@ -26,7 +26,8 @@
     "access": "public"
   },
   "files": [
-    "dist"
+    "es",
+    "lib"
   ],
   "gitHooks": {
     "pre-commit": "lint-staged"
