@@ -1,5 +1,5 @@
 import { useEffect, DependencyList, useState } from 'react';
-import useLoading, { FinishedParams, IUseLoadingState } from '../useLoading';
+import useLoading, { FinishedParams } from '../useLoading';
 import { isFunction, PromiseReturnType } from '../_internal/utils';
 
 type IUseFetchState<D> = {
@@ -36,12 +36,14 @@ export default function useFetch<T extends (...args: any[]) => any>(
     useCustomEffect = useEffect,
   }: IUseFetchOptions<T> = {},
 ) {
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(() => {
+    const _initialState = isFunction(initialState)
+      ? initialState()
+      : initialState;
+    return { ..._initialState };
+  });
 
-  const result = useLoading<
-    typeof func,
-    IUseLoadingState<T> & IUseFetchState<PromiseReturnType<T>>
-  >(func, {
+  const result = useLoading(func, {
     onSuccess: (data, ...params) => {
       if (onSuccess) {
         const sucResult = onSuccess(data, ...params);
