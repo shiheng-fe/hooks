@@ -42,11 +42,12 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.0.1",
-    "father": "^2.16.0",
+    "father": "~2.16.0",
     "father-doc": "^1.0.0-alpha.2",
     "prettier": "^1.18.2",
     "react": "^16.9.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "vfile-message": "^3.0.2"
   },
   "license": "MIT"
 }
