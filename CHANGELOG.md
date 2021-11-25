@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.4](https://www.github.com/shiheng-fe/hooks/compare/v1.0.3...v1.0.4) (2021-11-25)
+
+
+### Dev
+
+* :construction_worker: 修改打包方式 ([5cdbb37](https://www.github.com/shiheng-fe/hooks/commit/5cdbb374ae7286ab2eb55cff8dc4f920fc22b7ec))
+
 ### [1.0.3](https://www.github.com/shiheng-fe/hooks/compare/v1.0.2...v1.0.3) (2021-11-25)
 
 
