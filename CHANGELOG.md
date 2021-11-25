@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.2](https://www.github.com/shiheng-fe/hooks/compare/v1.0.1...v1.0.2) (2021-11-25)
+
+
+### Dev
+
+* package config ([c79033c](https://www.github.com/shiheng-fe/hooks/commit/c79033cae684fda54ea8e3a56f44ca4bc616eea1))
+
 ### [1.0.1](https://www.github.com/shiheng-fe/hooks/compare/v1.0.0...v1.0.1) (2021-11-25)
 
 
