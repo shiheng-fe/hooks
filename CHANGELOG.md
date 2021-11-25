@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.5](https://www.github.com/shiheng-fe/hooks/compare/v1.0.4...v1.0.5) (2021-11-25)
+
+
+### Bug Fixes
+
+* :bug: npm files ([2794ef2](https://www.github.com/shiheng-fe/hooks/commit/2794ef2723c04ad5ad2e988c1554c79ced30a36a))
+
 ### [1.0.4](https://www.github.com/shiheng-fe/hooks/compare/v1.0.3...v1.0.4) (2021-11-25)
 
 
