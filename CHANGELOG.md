@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.3](https://www.github.com/shiheng-fe/hooks/compare/v1.0.2...v1.0.3) (2021-11-25)
+
+
+### Bug Fixes
+
+* :bug: type error ([569f616](https://www.github.com/shiheng-fe/hooks/commit/569f6164d83ae6dec140150c67d46ea9a05b6dac))
+
 ### [1.0.2](https://www.github.com/shiheng-fe/hooks/compare/v1.0.1...v1.0.2) (2021-11-25)
 
 
