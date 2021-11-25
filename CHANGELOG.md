@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/shiheng-fe/hooks/compare/v1.0.0...v1.0.1) (2021-11-25)
+
+
+### Bug Fixes
+
+* :bug: release CI ([9f9f6d7](https://www.github.com/shiheng-fe/hooks/commit/9f9f6d7a2bd5efa51ae4eb8f07f61f39e055d35e))
+* :bug: types define ([4c02ea7](https://www.github.com/shiheng-fe/hooks/commit/4c02ea749bc53ef9ddd0585f95f7125ce77b4045))
+
 ## [1.0.0](https://www.github.com/shiheng-fe/hooks/compare/v0.0.15...v1.0.0) (2021-11-24)
 
 
