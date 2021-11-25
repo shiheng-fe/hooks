@@ -8,6 +8,8 @@
 
 # production
 /dist
+/es
+/lib
 /docs-dist
 
 # misc

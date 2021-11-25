@@ -12,9 +12,8 @@
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "./dist/index.d.ts",
+  "main": "lib/index.js",
+  "module": "./es/index.js",
   "sideEffects": false,
   "keywords": [
     "hooks",
@@ -23,6 +22,7 @@
     "shiheng"
   ],
   "publishConfig": {
+    "tag": "next",
     "access": "public"
   },
   "files": [
