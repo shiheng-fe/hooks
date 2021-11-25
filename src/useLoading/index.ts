@@ -1,6 +1,6 @@
-import useImmutable from '@/useImmutable';
+import useImmutable from '../useImmutable';
 import { useState, useMemo } from 'react';
-import { PromiseReturnType } from '@/_internal/utils';
+import { PromiseReturnType } from '../_internal/utils';
 
 export type IUseLoadingState<T extends (...args: any[]) => Promise<any>> = {
   loading: boolean;
@@ -24,7 +24,7 @@ export type IUseLoadingOptions<T extends (...args: any[]) => Promise<any>> = {
 export default function useLoading<
   T extends (...args: any[]) => Promise<any>,
   S extends IUseLoadingState<T>,
->(fn: T, options: IUseLoadingOptions<T>, initialState?: Partial<S>) {
+>(fn: T, options?: IUseLoadingOptions<T>, initialState?: Partial<S>) {
   const [state, setState] = useState<S>({
     loading: false,
     ...initialState,

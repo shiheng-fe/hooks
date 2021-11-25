@@ -1,6 +1,6 @@
 import { useEffect, DependencyList, useState } from 'react';
 import useLoading, { FinishedParams, IUseLoadingState } from '../useLoading';
-import { isFunction, PromiseReturnType } from '@/_internal/utils';
+import { isFunction, PromiseReturnType } from '../_internal/utils';
 
 type IUseFetchState<D> = {
   data?: D;
