@@ -1,5 +1,4 @@
-import useImmutable from '../useImmutable';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { PromiseReturnType } from '../_internal/utils';
 
 export type IUseLoadingState<T extends (...args: any[]) => Promise<any>> = {
@@ -21,24 +20,32 @@ export type IUseLoadingOptions<T extends (...args: any[]) => Promise<any>> = {
   onFinished?: (...args: FinishedParams<T>) => void;
 };
 
-export default function useLoading<
-  T extends (...args: any[]) => Promise<any>,
-  S extends IUseLoadingState<T>,
->(fn: T, options?: IUseLoadingOptions<T>, initialState?: Partial<S>) {
-  const [state, setState] = useState<S>({
+type FnsRef<T extends (...args: any[]) => Promise<any>> =
+  IUseLoadingOptions<T> & {
+    fn: T;
+    cancel?(): void;
+  };
+
+export default function useLoading<T extends (...args: any[]) => Promise<any>>(
+  fn: T,
+  options?: IUseLoadingOptions<T>,
+  initialState?: Partial<IUseLoadingState<T>>,
+) {
+  const [state, setState] = useState<IUseLoadingState<T>>({
     loading: false,
     ...initialState,
   } as any);
 
-  const fnsRef = useImmutable<
-    IUseLoadingOptions<T> & {
-      fn: T;
-      cancel?(): void;
-    }
-  >({
+  const fnsRef = useRef<FnsRef<T>>({
     fn,
     ...options,
   });
+
+  fnsRef.current = {
+    cancel: fnsRef.current.cancel,
+    fn,
+    ...options,
+  };
 
   const { run, cancel } = useMemo(
     () => ({
