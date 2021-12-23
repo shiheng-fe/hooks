@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.7](https://www.github.com/shiheng-fe/hooks/compare/v1.0.6...v1.0.7) (2021-12-23)
+
+
+### Bug Fixes
+
+* useControlledValue 易用性提升 ([8ba05e1](https://www.github.com/shiheng-fe/hooks/commit/8ba05e17ee2384f48db24eea809b910b49f77ded))
+
 ### [1.0.6](https://www.github.com/shiheng-fe/hooks/compare/v1.0.5...v1.0.6) (2021-11-25)
 
 
