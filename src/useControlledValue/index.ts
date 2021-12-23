@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
+import useImmutableFn from '@/useImmutableFn';
 
 export type OptionsType<T> = {
   defaultValue?: T;
@@ -36,13 +37,13 @@ function useControlledValue<T = any>(
   });
   const mergedValue: T = controlled ? props[valueName] : innerValue;
 
-  const setMergedValue = useCallback((value: T, ...rest: any[]) => {
+  const setMergedValue = useImmutableFn((value: T, ...rest: any[]) => {
     if (!controlled) {
       setInnerValue(value);
     }
     props[onChangeName] && props[onChangeName](value, ...rest);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return [mergedValue, setMergedValue] as const;
 }
