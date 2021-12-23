@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import useImmutableFn from '@/useImmutableFn';
+import useImmutableFn from '../useImmutableFn';
 
 export type OptionsType<T> = {
   defaultValue?: T;
