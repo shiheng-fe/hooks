@@ -8,6 +8,35 @@ group:
   path: /common
 ---
 
-<!-- TODO: 待补充 -->
-
 # useForceUpdate
+一个能够强制刷新页面的hook,利用state只要变化就会重新渲染页面的原理。
+
+### Examples
+返回的是一个函数，这个函数只要执行就能强制性的重新渲染当前的组件。
+```tsx
+export default (() => {
+  const forceUpdate = useForceUpdate();
+  const refValue = useRef(-1);
+  setTimeout(() => {
+    refValue.current = 2;
+  });
+  return (
+    <>
+      <Button onClick={() => forceUpdate()}>点击</Button>
+      <div>refValue的值 {refValue.current}</div>
+    </>
+  );
+}) as React.FC;
+```
+
+### API
+```typescript
+const forceUpdate = useForceUpdate()
+```
+
+### Result
+
+| 参数     | 说明           | 类型                                   |
+| -------- | -------------- | -------------------------------------- |
+| forceUpdate    | 一个执行了就会强制性刷新组件的函数         | `() => void`                                  |
+

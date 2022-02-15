@@ -1,83 +1,64 @@
-import { useState, useMemo, useRef } from 'react';
-import { PromiseReturnType } from '../_internal/utils';
+import { useState, useRef, useMemo } from 'react';
+import { PromiseReturnType } from '../utils';
 
 export type IUseLoadingState<T extends (...args: any[]) => Promise<any>> = {
   loading: boolean;
   params?: Parameters<T>;
 };
 
-export type FinishedParams<T extends (...args: any[]) => Promise<any>> = [
-  (
-    | { successful: true; payload: PromiseReturnType<T> }
-    | { successful: false; payload: Error }
-  ),
-  ...Parameters<T>
-];
-
-export type IUseLoadingOptions<T extends (...args: any[]) => Promise<any>> = {
-  onSuccess?: (result: PromiseReturnType<T>, ...params: Parameters<T>) => void;
-  onError?: (error: Error, ...params: Parameters<T>) => void;
-  onFinished?: (...args: FinishedParams<T>) => void;
+type IUseLoadingOption<T extends (...args: any[]) => Promise<any>> = {
+  onSuccess?: (result: PromiseReturnType<T>, params: Parameters<T>) => void;
+  onError?: (error: Error, params: Parameters<T>) => void;
 };
 
-type FnsRef<T extends (...args: any[]) => Promise<any>> =
-  IUseLoadingOptions<T> & {
-    fn: T;
-    cancel?(): void;
-  };
-
-export default function useLoading<T extends (...args: any[]) => Promise<any>>(
+export default function useLoading<
+  T extends (...args: any[]) => Promise<any>,
+  S extends IUseLoadingState<T>
+>(
   fn: T,
-  options?: IUseLoadingOptions<T>,
-  initialState?: Partial<IUseLoadingState<T>>,
+  options:
+  | IUseLoadingOption<T>
+  | ((setState: React.Dispatch<React.SetStateAction<S>>) => IUseLoadingOption<T>) = {},
+  initialState?: Partial<S>,
 ) {
-  const [state, setState] = useState<IUseLoadingState<T>>({
-    loading: false,
-    ...initialState,
-  } as any);
+  const [state, setState] = useState<S>({ loading: false, ...initialState } as any);
 
-  const fnsRef = useRef<FnsRef<T>>({
-    fn,
-    ...options,
-  });
-
+  const fnsRef = useRef<
+  IUseLoadingOption<T> & {
+    cancel: () => void;
+    fn: T;
+  }
+  >({ fn, cancel: () => {} });
   fnsRef.current = {
-    cancel: fnsRef.current.cancel,
+    ...fnsRef.current,
     fn,
-    ...options,
+    ...(typeof options === 'function' ? options(setState) : options),
   };
 
   const { run, cancel } = useMemo(
     () => ({
       run: (...args: Parameters<T>) => {
         let abort = false;
-        const { fn, cancel, onSuccess, onError, onFinished } = fnsRef.current!;
-        cancel && cancel();
+        const { fn, cancel, onSuccess, onError } = fnsRef.current!;
+        cancel();
 
-        setState((s) => ({ ...s, loading: true, params: args }));
+        setState(s => ({ ...s, loading: true, params: args }));
 
         fn(...args)
-          .then((result) => {
+          .then(result => {
             if (abort) return;
-            onSuccess && onSuccess(result, ...args);
-            setState((s) => ({ ...s, loading: false }));
-            onFinished &&
-              onFinished({ successful: true, payload: result }, ...args);
+            onSuccess && onSuccess(result, args);
+            setState(s => ({ ...s, loading: false }));
           })
-          .catch((error) => {
+          .catch(error => {
             if (abort) return;
-            onError && onError(error, ...args);
-            setState((s) => ({ ...s, loading: false }));
-            onFinished &&
-              onFinished({ successful: false, payload: error }, ...args);
+            onError && onError(error, args);
+            setState(s => ({ ...s, loading: false }));
           });
 
         fnsRef.current.cancel = () => (abort = true);
       },
-      cancel: () => {
-        const { cancel } = fnsRef.current;
-        cancel && cancel();
-      },
+      cancel: () => fnsRef.current.cancel(),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
