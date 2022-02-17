@@ -24,7 +24,10 @@ export type OptionsType<T> = {
   onChangeName?: string;
 };
 
-function useControlledValue<T = any>(props: { [key: string]: any }, options: OptionsType<T> = {}) {
+function useControlledValue<T = any>(
+  props: { [key: string]: any },
+  options: OptionsType<T> = {},
+) {
   const {
     defaultValue,
     defaultValueName = 'defaultValue',

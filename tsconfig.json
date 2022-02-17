@@ -9,10 +9,6 @@
     "sourceMap": true,
     "baseUrl": "./",
     "strict": true,
-    "paths": {
-      "@/*": ["src/*"],
-      "@@/*": ["src/.umi/*"]
-    },
     "typeRoots": ["./typings"],
     "declaration": true,
     "allowSyntheticDefaultImports": true,
