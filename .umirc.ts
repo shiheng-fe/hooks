@@ -14,5 +14,17 @@ export default defineConfig({
     },
   ],
 
+  extraBabelPlugins: [
+    [
+      'babel-plugin-import',
+      {
+        libraryName: 'antd',
+        libraryDirectory: 'es',
+        style: true,
+      },
+      'antd',
+    ],
+  ],
+
   // more config: https://d.umijs.org/config
 });
