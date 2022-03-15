@@ -47,16 +47,17 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
     ...options,
   };
 
-  const { run, cancel } = useMemo(
+  const methods = useMemo(
     () => ({
-      run: (...args: Parameters<T>) => {
+      run: async (...args: Parameters<T>) => {
         let abort = false;
         const { fn, cancel, onSuccess, onError, onFinished } = fnsRef.current!;
         cancel && cancel();
+        fnsRef.current.cancel = () => (abort = true);
 
         setState((s) => ({ ...s, loading: true, params: args }));
 
-        fn(...args)
+        return fn(...args)
           .then((result) => {
             if (abort) return;
             onSuccess && onSuccess(result, ...args);
@@ -71,8 +72,6 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
             onFinished &&
               onFinished({ successful: false, payload: error }, ...args);
           });
-
-        fnsRef.current.cancel = () => (abort = true);
       },
       cancel: () => {
         const { cancel } = fnsRef.current;
@@ -86,7 +85,6 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
   return {
     ...state,
     setState,
-    run,
-    cancel,
+    ...methods,
   };
 }
