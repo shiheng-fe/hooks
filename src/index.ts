@@ -7,6 +7,7 @@ export { default as useFetch } from './useFetch';
 export { default as useImmutable } from './useImmutable';
 export {
   default as useImmutableFunc,
+  default as useImmutableFn,
   // 兼容旧版
   default as useEventCallback,
 } from './useImmutableFn';
