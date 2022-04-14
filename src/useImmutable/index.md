@@ -1,56 +1,57 @@
 ---
 nav:
-  title: Hooks
   path: /hooks
-
-group:
-  title: common
-  path: /common
 ---
 
 # useImmutable
 
-用法同 useRef，但是每次组件重新渲染，执行该行代码，都会重新执行赋值语句，这点与 useRef 不同。
+`useEffect`、`useMemo` 等 **hook** 会产生一些闭包，如果不把变量添加到依赖里面，就取不到最新的变量值，使用 `useImmutable` 保存变量，就可以在函数内部取到最新的变量值。
 
 ### Example
 
-用法同 useRef,下面这个示例能够体现出同 useRef 的区别。
-
 ```tsx
-import React, { useRef } from 'react';
-import { Button } from 'antd';
+import React, { useReducer, useCallback, useEffect } from 'react';
+import { Button, message } from 'antd';
 import { useImmutable, useForceUpdate } from '@shihengtech/hooks';
 
 export default (() => {
-  const ref1 = useRef([1]);
-  const ref2 = useImmutable([2]);
-  const forceUpdate = useForceUpdate();
-  ref1.current.push(10);
-  ref2.current.push(20);
-  console.log(ref1);
-  console.log(ref2);
-  return (
-    <>
-      <Button onClick={forceUpdate}>重新渲染</Button>
-    </>
-  );
+  const [value, add] = useReducer((x) => x + 1, 0);
+  const valueRef = useImmutable(value);
+
+  const alertMessage = useCallback(() => {
+    message.info(`value: ${value}, actual value: ${valueRef.current}`);
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(add, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [value]);
+
+  return <Button onClick={alertMessage}>让我看看</Button>;
 }) as React.FC;
+```
+
+### Types
+
+```typescript
+useImmutable<D>(val: D): React.MutableRefObject<D>
 ```
 
 ### API
 
 ```typescript
-const value = useImmutable(1);
+const valueRef = useImmutable(1);
 ```
 
 ### Params
 
-| 参数         | 说明          | 类型  | 默认值 |
-| ------------ | ------------- | ----- | ------ |
-| initialValue | 参数同 useRef | `any` | -      |
+| 参数         | 说明           | 类型  | 默认值 |
+| ------------ | -------------- | ----- | ------ |
+| initialValue | 你要存储的变量 | `any` | -      |
 
 ### Result
 
-| 参数  | 说明              | 类型                     |
-| ----- | ----------------- | ------------------------ |
-| value | 返回参数同 useRef | `React.MutableRefObject` |
+| 参数     | 说明            | 类型                     |
+| -------- | --------------- | ------------------------ |
+| valueRef | 返回值同 useRef | `React.MutableRefObject` |

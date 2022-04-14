@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-const useImmutable = <D = any>(val: D) => {
+const useImmutable = <D>(val: D) => {
   const r = useRef<D>(val);
 
   r.current = val;

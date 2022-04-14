@@ -1,20 +1,13 @@
 ---
 nav:
-  title: Hooks
   path: /hooks
-
-group:
-  title: common
-  path: /common
 ---
 
 # useLocalStorageState
 
-useLocalStorageState 与 useState 返回的结果是完全一致的，目的也是一样的，为了修改 state，区别是 useLocalStorage 储存的值会存到 localStorage 中
+会将状态保存在 `localStorage` 中的 `useState`
 
 ## Examples
-
-此时可在控制台用 localStorage.getItem('key') 获取到值。
 
 ```tsx
 import React from 'react';
@@ -25,29 +18,28 @@ export default (() => {
   const [localStorage, setLocalStorage] = useLocalStorageState('key', 1);
   return (
     <>
-      <Button onClick={() => setLocalStorage((v) => v + 1)}>
-        setLocalStorage
-      </Button>
+      <Button onClick={() => setLocalStorage((v) => v + 1)}>add</Button>
       {localStorage}
     </>
   );
 }) as React.FC;
 ```
 
+### Types
+
+```typescript
+useLocalStorageState<T>(key: string, defaultValue?: T | (() => T)): readonly [T, React.Dispatch<React.SetStateAction<T>>];
+```
+
 ## API
 
-```tsx | pure
-const [localStorage, setLocalStorage] = useLocalStorageState('key');
+```typescript
+const [state, setState] = useLocalStorageState<T>(key: string, defaultValue?: T | (() => T));
 ```
 
 ### Params
 
-| 参数 | 说明                                  | 类型     | 默认值 |
-| ---- | ------------------------------------- | -------- | ------ |
-| key  | 必填，localStorage 存储的键值对的键值 | `string` | -      |
-
-### Result
-
-| 参数                 | 说明                                                  | 类型 |
-| -------------------- | ----------------------------------------------------- | ---- |
-| [state, updateState] | 同 useState，updateState 会更新 localStorage 里的数据 | `-`  |
+| 参数         | 说明                                           | 类型     | 默认值     |
+| ------------ | ---------------------------------------------- | -------- | ---------- | --- |
+| key          | 必填，`localStorage` 存储的键值对的键值        | `string` | -          |
+| defaultValue | 默认值，会优先以 `localStorage` 中保存的值为准 | `any     | () => any` | -   |

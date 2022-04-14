@@ -1,11 +1,6 @@
 ---
 nav:
-  title: Hooks
   path: /hooks
-
-group:
-  title: common
-  path: /common
 ---
 
 # useSelections

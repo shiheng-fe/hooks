@@ -1,12 +1,20 @@
 ---
 nav:
-  title: Hooks
   path: /hooks
-
-group:
-  title: common
-  path: /common
 ---
 
 # useImmutableFn
-用法同useCallback，但是内部是用useImmutable实现的，也是同样每次渲染组件都会重新赋值函数。详细文档参照useImmutable。
+
+[useImmutable](use-immutable) 的函数版本，返回结果为一个同类型的函数，可直接调用，去除了通过 `current` 的方式取值
+
+### Types
+
+```typescript
+useImmutableFn<T extends (...args: any[]) => any>(fn: T): T
+```
+
+### API
+
+```typescript
+const fn = useImmutableFn(() => console.log('😁'));
+```

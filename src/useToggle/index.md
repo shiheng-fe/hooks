@@ -1,14 +1,7 @@
 ---
 nav:
-  title: Hooks
   path: /hooks
-
-group:
-  title: common
-  path: /common
 ---
-
-<!-- TODO: 待补充 -->
 
 # useToggle
 
@@ -30,6 +23,12 @@ export default (() => {
     </>
   );
 }) as React.FC;
+```
+
+### Types
+
+```typescript
+useToggle(initialValue: boolean): [boolean, (nextValue?: any) => void];
 ```
 
 ## API

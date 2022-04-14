@@ -1,20 +1,13 @@
 ---
 nav:
-  title: Hooks
   path: /hooks
-
-group:
-  title: common
-  path: /common
 ---
 
 # useForceUpdate
 
-一个能够强制刷新页面的 hook,利用 state 只要变化就会重新渲染页面的原理。
+一个能够强制函数组件重新渲染的 `hook`，类似于 `class` 组件中的 `this.forceUpdate()`。
 
 ### Examples
-
-返回的是一个函数，这个函数只要执行就能强制性的重新渲染当前的组件。
 
 ```tsx
 import React, { useRef } from 'react';
@@ -29,11 +22,17 @@ export default (() => {
   });
   return (
     <>
-      <Button onClick={() => forceUpdate()}>点击</Button>
+      <Button onClick={forceUpdate}>点击</Button>
       <div>refValue的值 {refValue.current}</div>
     </>
   );
 }) as React.FC;
+```
+
+### Types
+
+```typescript
+useForceUpdate(): () => void;
 ```
 
 ### API

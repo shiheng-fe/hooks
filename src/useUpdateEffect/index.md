@@ -1,16 +1,11 @@
 ---
 nav:
-  title: Hooks
   path: /hooks
-
-group:
-  title: common
-  path: /common
 ---
 
 # useUpdateEffect
 
-useUpdateEffect 与 effect 的入参，效果都是完全一致的，唯一的区别是 effect 无论如何都会执行一次在一开始渲染时，而 useUpdateEffect 第一次初始渲染是不会执行的，只有当 deps 数据发生改变才会执行。
+`useUpdateEffect` 用法与 `useEffect` 一致，但会跳过首次执行，只有在后续依赖更新时才会执行。
 
 ## Examples
 
@@ -22,16 +17,23 @@ import { Button } from 'antd';
 import { useUpdateEffect } from '@shihengtech/hooks';
 
 export default (() => {
-  const [value, setValue] = useState(1);
+  const [renderCount, setRenderCount] = useState(1);
+  const [effectCount, setEffectCount] = useState(0);
+  const [updateEffectCount, setUpdateEffectCount] = useState(0);
+
   useUpdateEffect(() => {
-    console.log('执行updateEffect');
-  }, [value]);
+    setUpdateEffectCount((v) => v + 1);
+  }, [renderCount]);
+
   useEffect(() => {
-    console.log('执行effect');
-  }, [value]);
+    setEffectCount((v) => v + 1);
+  }, [renderCount]);
+
   return (
     <>
-      <Button onClick={() => setValue((v) => v + 1)}>setValue</Button> {value}
+      <div>effect times: {effectCount}</div>
+      <div>update effect times: {updateEffectCount}</div>
+      <Button onClick={() => setRenderCount((v) => v + 1)}>reRender</Button>
     </>
   );
 }) as React.FC;
@@ -40,3 +42,11 @@ export default (() => {
 ## API、Params、Action
 
 同 useEffect
+
+```typescript
+useUpdateEffect(
+  effect: React.EffectCallback,
+  deps?: React.DependencyList,
+)
+
+```
