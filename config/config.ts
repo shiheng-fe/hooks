@@ -3,7 +3,7 @@ import menus from './hooks';
 
 export default defineConfig({
   title: 'hooks',
-  base: 'hooks',
+  publicPath: '/hooks/',
   favicon: 'https://bi.shihengtech.com/favicon.png',
   logo: 'https://bi.shihengtech.com/favicon.png',
   outputPath: 'docs-dist',
