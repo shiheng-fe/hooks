@@ -42,7 +42,7 @@
     ]
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": "17.x || 18.x"
   },
   "devDependencies": {
     "@diamondyuan/eslint-config-react-typescript": "^7.0.4",
