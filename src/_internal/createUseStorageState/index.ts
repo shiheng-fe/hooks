@@ -1,12 +1,21 @@
-import { useCallback, useState } from 'react';
-import { delayRun, isFunction, Nullable } from '../utils';
+import { useState } from 'react';
+import { run, delayRun, isFunction, Nullable } from '../utils';
+import useUpdateEffect from '../../useUpdateEffect';
+import useImmutableFn from '../..//useImmutableFn';
 
 type _Storage = Pick<Storage, 'setItem' | 'getItem' | 'removeItem'>;
 
+type Options = Partial<{
+  /**
+   * @default async
+   */
+  mode: 'sync' | 'async';
+}>;
+
 export const createUseStorageState =
   (storage: Nullable<_Storage>) =>
-  <T>(key: string, defaultValue?: T | (() => T)) => {
-    const [state, setState] = useState<T>(() => {
+  <T>(key: string, defaultValue?: T | (() => T), options?: Options) => {
+    const initialize = () => {
       try {
         const localValue = JSON.parse(storage?.getItem(key)!);
         // eslint-disable-next-line no-void
@@ -14,33 +23,30 @@ export const createUseStorageState =
       } catch (_e) {}
 
       return isFunction(defaultValue) ? defaultValue() : defaultValue;
-    });
+    };
 
-    const updateState: typeof setState = useCallback(
-      (value) => {
-        const valueType = typeof value;
-        if (valueType === 'function') {
-          setState((v) => {
-            const nextValue = (value as (value: T) => T)(v);
+    const [state, setState] = useState<T>(initialize);
 
-            delayRun(() => storage?.setItem(key, JSON.stringify(nextValue)));
-            return nextValue;
-          });
-          return;
-        }
+    useUpdateEffect(() => {
+      initialize();
+    }, [key]);
 
-        if (valueType === 'undefined') {
-          setState(value);
-          delayRun(() => storage?.removeItem(key));
-          return;
-        }
+    const { mode } = { mode: 'async', ...options } as Required<Options>;
 
+    const updateState: typeof setState = useImmutableFn((value) => {
+      const nextValue = isFunction(value) ? value(state) : value;
+
+      if (typeof nextValue === 'undefined') {
         setState(value);
-        delayRun(() => storage?.setItem(key, JSON.stringify(value)));
-      },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [],
-    );
+        (mode === 'async' ? delayRun : run)(() => storage?.removeItem(key));
+        return;
+      }
+
+      setState(nextValue);
+      (mode === 'async' ? delayRun : run)(() =>
+        storage?.setItem(key, JSON.stringify(value)),
+      );
+    });
 
     return [state, updateState] as const;
   };
