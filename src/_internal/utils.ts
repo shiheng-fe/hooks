@@ -15,3 +15,5 @@ export function delay(ms: number) {
 }
 
 export const delayRun = (fn: Function) => setTimeout(fn);
+
+export const run = (fn: Function) => fn();
