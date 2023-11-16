@@ -49,7 +49,7 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
 
   const methods = useMemo(
     () => ({
-      run: async (...args: Parameters<T>) => {
+      run: async (...args: Parameters<T>): Promise<ReturnType<T>> => {
         let abort = false;
         const { fn, cancel, onSuccess, onError, onFinished } = fnsRef.current!;
         cancel && cancel();
@@ -64,6 +64,7 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
             setState((s) => ({ ...s, loading: false }));
             onFinished &&
               onFinished({ successful: true, payload: result }, ...args);
+            return result;
           })
           .catch((error) => {
             if (abort) return;
@@ -71,6 +72,7 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
             setState((s) => ({ ...s, loading: false }));
             onFinished &&
               onFinished({ successful: false, payload: error }, ...args);
+            throw error;
           });
       },
       cancel: () => {
