@@ -2,10 +2,9 @@
   "umi_pro.autoGenerateSagaEffectsCommands": true,
   "editor.detectIndentation": false,
   "eslint.trace.server": "messages",
-  "eslint.packageManager": "yarn",
   "editor.tabSize": 2,
   "files.insertFinalNewline": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   }
 }

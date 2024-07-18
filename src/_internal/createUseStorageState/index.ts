@@ -28,7 +28,7 @@ export const createUseStorageState =
     const [state, setState] = useState<T>(initialize);
 
     useUpdateEffect(() => {
-      initialize();
+      setState(initialize());
     }, [key]);
 
     const { mode } = { mode: 'async', ...options } as Required<Options>;
@@ -37,14 +37,14 @@ export const createUseStorageState =
       const nextValue = isFunction(value) ? value(state) : value;
 
       if (typeof nextValue === 'undefined') {
-        setState(value);
+        setState(nextValue);
         (mode === 'async' ? delayRun : run)(() => storage?.removeItem(key));
         return;
       }
 
       setState(nextValue);
       (mode === 'async' ? delayRun : run)(() =>
-        storage?.setItem(key, JSON.stringify(value)),
+        storage?.setItem(key, JSON.stringify(nextValue)),
       );
     });
 
