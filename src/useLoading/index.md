@@ -13,7 +13,7 @@ nav:
 
 ```tsx
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 import { useLoading } from '@shihengtech/hooks';
 
 export default (() => {
@@ -25,6 +25,7 @@ export default (() => {
   const { run, loading } = useLoading(
     async () => {
       await sleep(2000);
+      console.log(1111);
       return '成功loading2s';
     },
     {
@@ -35,10 +36,30 @@ export default (() => {
     },
     { loading: false },
   );
+
+  const { run: debounceRun } = useLoading(
+    async () => {
+      await sleep(2000);
+      console.log(2222);
+      return '成功loading2s';
+    },
+    {
+      debounceWait: 300,
+      onSuccess: (res) => {
+        console.log(res);
+        // 打印'成功loading2s'
+      },
+    },
+    { loading: false },
+  );
   return (
-    <Button loading={loading} onClick={run}>
-      点击
-    </Button>
+    <Space>
+      <Button loading={loading} onClick={run}>
+        loading点击
+      </Button>
+      <Button onClick={run}>普通点击</Button>
+      <Button onClick={debounceRun}>防抖点击</Button>
+    </Space>
   );
 }) as React.FC;
 ```
