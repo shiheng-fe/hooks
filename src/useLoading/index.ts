@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { PromiseReturnType } from '../_internal/utils';
 
 export type IUseLoadingState<T extends (...args: any[]) => Promise<any>> = {
@@ -24,7 +24,7 @@ export type IUseLoadingOptions<T extends (...args: any[]) => Promise<any>> = {
 type FnsRef<T extends (...args: any[]) => Promise<any>> =
   IUseLoadingOptions<T> & {
     fn: T;
-    debounceTimer?: NodeJS.Timeout | null;
+    debounceTimer?: number | null;
     cancel?(): void;
   };
 
@@ -49,37 +49,41 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
     ...options,
   };
 
-  const executeRequest = useCallback(async (...args: Parameters<T>) => {
-    let abort = false;
-    const { fn, cancel, onSuccess, onError, onFinished } = fnsRef.current!;
-    cancel && cancel();
-    fnsRef.current.cancel = () => (abort = true);
+  const executeRequest = useCallback(
+    async (...args: Parameters<T>): Promise<PromiseReturnType<T>> => {
+      let abort = false;
+      const { fn, cancel, onSuccess, onError, onFinished } = fnsRef.current!;
+      cancel && cancel();
+      fnsRef.current.cancel = () => (abort = true);
 
-    setState((s) => ({ ...s, loading: true, params: args }));
+      setState((s) => ({ ...s, loading: true, params: args }));
 
-    return fn(...args)
-      .then((result) => {
-        if (abort) return;
-        onSuccess && onSuccess(result, ...args);
-        setState((s) => ({ ...s, loading: false }));
-        onFinished &&
-          onFinished({ successful: true, payload: result }, ...args);
-      })
-      .catch((error) => {
-        if (abort) return;
-        onError && onError(error, ...args);
-        setState((s) => ({ ...s, loading: false }));
-        onFinished &&
-          onFinished({ successful: false, payload: error }, ...args);
-      });
-  }, []);
+      return fn(...args)
+        .then((result) => {
+          if (abort) return;
+          onSuccess && onSuccess(result, ...args);
+          onFinished &&
+            onFinished({ successful: true, payload: result }, ...args);
+          return result;
+        })
+        .catch((error) => {
+          if (abort) return;
+          onError && onError(error, ...args);
+          onFinished &&
+            onFinished({ successful: false, payload: error }, ...args);
+          throw error;
+        })
+        .finally(() => {
+          setState((s) => ({ ...s, loading: false }));
+        });
+    },
+    [],
+  );
 
   const methods = useMemo(
     () => ({
-      run: (...args: Parameters<T>) => {
+      run: (...args: Parameters<T>): Promise<PromiseReturnType<T>> => {
         const { debounceWait } = fnsRef.current;
-
-        // 清除之前的防抖定时器
         if (fnsRef.current.debounceTimer) {
           clearTimeout(fnsRef.current.debounceTimer);
           fnsRef.current.debounceTimer = null;
@@ -87,13 +91,18 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
 
         // 如果设置了防抖时间，则延迟执行
         if (debounceWait && debounceWait > 0) {
-          fnsRef.current.debounceTimer = setTimeout(() => {
-            executeRequest(...args);
-          }, debounceWait);
-        } else {
-          // 没有设置防抖时间，直接执行
-          return executeRequest(...args);
+          // 返回 Promise，确保防抖模式下也能获得返回值
+          return new Promise<PromiseReturnType<T>>((resolve, reject) => {
+            fnsRef.current.debounceTimer = setTimeout(() => {
+              fnsRef.current.debounceTimer = null;
+              executeRequest(...args)
+                .then(resolve)
+                .catch(reject);
+            }, debounceWait) as unknown as number;
+          });
         }
+        // 没有设置防抖时间，直接执行
+        return executeRequest(...args);
       },
       cancel: () => {
         // 取消防抖定时器
@@ -108,6 +117,15 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
     }),
     [executeRequest],
   );
+
+  useEffect(() => {
+    return () => {
+      if (fnsRef.current.debounceTimer) {
+        clearTimeout(fnsRef.current.debounceTimer);
+        fnsRef.current.debounceTimer = null;
+      }
+    };
+  }, []);
 
   return {
     ...state,
