@@ -1,6 +1,6 @@
 {
   "name": "@shihengtech/hooks",
-  "version": "1.0.17",
+  "version": "1.0.19",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
