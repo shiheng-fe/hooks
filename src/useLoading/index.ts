@@ -71,7 +71,6 @@ export default function useLoading<T extends (...args: any[]) => Promise<any>>(
           onError && onError(error, ...args);
           onFinished &&
             onFinished({ successful: false, payload: error }, ...args);
-          throw error;
         })
         .finally(() => {
           setState((s) => ({ ...s, loading: false }));
