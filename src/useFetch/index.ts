@@ -9,6 +9,7 @@ type IUseFetchState<D> = {
 
 export interface IUseFetchOptions<T extends (...args: any[]) => any> {
   auto?: boolean;
+  debounceWait?: number;
   initialState?:
     | IUseFetchState<PromiseReturnType<T>>
     | (() => IUseFetchState<PromiseReturnType<T>>);
@@ -29,6 +30,7 @@ export default function useFetch<T extends (...args: any[]) => any>(
   deps: DependencyList = [],
   {
     auto = true,
+    debounceWait,
     onError,
     onSuccess,
     onFinished,
@@ -44,6 +46,7 @@ export default function useFetch<T extends (...args: any[]) => any>(
   });
 
   const result = useLoading(func, {
+    debounceWait,
     onSuccess: (data, ...params) => {
       if (onSuccess) {
         const sucResult = onSuccess(data, ...params);
